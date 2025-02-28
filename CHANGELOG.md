@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.2.0](https://github.com/Tsukina-7mochi/lua-testing-library/compare/v0.1.1...v0.2.0) (2025-02-28)
+
+
+### Features
+
+* add no color mode ([05b4050](https://github.com/Tsukina-7mochi/lua-testing-library/commit/05b4050001d9ad463cbfaae38d359e41590b892f))
+* escape string value in toDebugString ([27ba884](https://github.com/Tsukina-7mochi/lua-testing-library/commit/27ba8844b7eb3a90d50a6b1352f18d2621144747))
+* print number of tests executed in describe ([bbf1ee8](https://github.com/Tsukina-7mochi/lua-testing-library/commit/bbf1ee86a59d568de79387f8cd1bea1a048b8100))
+
+
+### Bug Fixes
+
+* enclose array indices in toDebugString with [] ([f8c3355](https://github.com/Tsukina-7mochi/lua-testing-library/commit/f8c335561bb271d581521647fe7e2638fddf68a2))
+
 ## [0.1.1](https://github.com/Tsukina-7mochi/lua-testing-library/compare/v0.1.0-pre2...v0.1.1) (2024-10-01)
 
 
