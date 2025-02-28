@@ -1,13 +1,11 @@
 local expect = require("src.expect")
 
----@alias DescribeFunc fun(name: string, func: fun(context: TestContext))
----@alias TestFunc fun(name: string, func: fun())
-
 ---@class Test
 ---@field name string
 ---@field func function
 ---@field result { success: boolean, error: string } | nil
 
+---Group of tests and test contexts.
 ---@class TestContext
 ---@field parent TestContext | nil
 ---@field name string
@@ -15,10 +13,14 @@ local expect = require("src.expect")
 ---@field result { success: boolean } | nil
 
 
+---Global context to detect current test context when `describe` and `test` are called.
 ---@type TestContext | nil
 _ENV.__testContext = nil
 
 
+---Colorize text with green.
+---@param text string
+---@return string
 local function chalkGreen(text)
     if os.getenv("NO_COLOR") then
         return text
@@ -27,6 +29,9 @@ local function chalkGreen(text)
     end
 end
 
+---Colorize text with red.
+---@param text string
+---@return string
 local function chalkRed(text)
     if os.getenv("NO_COLOR") then
         return text
@@ -35,6 +40,7 @@ local function chalkRed(text)
     end
 end
 
+---Dump test context tree. Only for debug.
 ---@param ctx TestContext | Test
 ---@param indent integer
 local function dumpTest(ctx, indent)
@@ -48,12 +54,13 @@ local function dumpTest(ctx, indent)
     end
 end
 
+---Perform test for the given test context tree.
 ---@param ctx TestContext | Test
 ---@param depth integer
 ---@return boolean succeeded
 local function performTest(ctx, depth)
     if ctx.func ~= nil then
-        --node is Test
+        -- `ctx` is the Test
 
         local success, err = pcall(ctx.func)
         ctx.result = {
@@ -61,11 +68,10 @@ local function performTest(ctx, depth)
             error = tostring(err),
         }
     else
-        --node is test context
+        -- `ctx` is test context
 
+        ctx.result = { success = true }
         for _, child in ipairs(ctx.children) do
-            ctx.result = { success = true }
-
             if not performTest(child, depth + 1) then
                 ctx.result.success = false
             end
@@ -75,7 +81,7 @@ local function performTest(ctx, depth)
     return ctx.result.success
 end
 
-
+---Print test result.
 ---@param ctx TestContext
 ---@param depth integer
 ---@param path string[]
@@ -93,6 +99,8 @@ local function printTestResult(ctx, depth, path)
     end
 
     if ctx.children ~= nil then
+        --- `ctx` is test context
+
         local successCount = 0
         for _, child in ipairs(ctx.children) do
             if child.result.success then
@@ -121,6 +129,8 @@ local function printTestResult(ctx, depth, path)
 
         print(nameAndResult)
     else
+        --- `ctx` is test
+
         print(table.concat({
             ("  "):rep(depth),
             ctx.name,
@@ -168,10 +178,12 @@ local function describe(name, func)
     }
 
     if _ENV.__testContext ~= nil then
+        -- Set up parent-child relationship
         table.insert(_ENV.__testContext.children, ctx)
         ctx.parent = _ENV.__testContext
     end
 
+    -- Set current test context
     _ENV.__testContext = ctx
 
     func()
@@ -185,6 +197,7 @@ local function describe(name, func)
             os.exit(1)
         end
     else
+        -- Restore parent context
         _ENV.__testContext = _ENV.__testContext.parent
     end
 end
@@ -194,6 +207,7 @@ end
 ---@param func fun()
 local function test(name, func)
     if _ENV.__testContext == nil then
+        -- Define anonymous test context
         _ENV.__testContext = {
             parent = nil,
             name = "(anonymous)",
