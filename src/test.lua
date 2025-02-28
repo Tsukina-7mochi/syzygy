@@ -20,11 +20,19 @@ _ENV.__testContext = nil
 
 
 local function chalkGreen(text)
-    return "\x1b[92m" .. text .. "\x1b[0m"
+    if os.getenv("NO_COLOR") then
+        return text
+    else
+        return "\x1b[92m" .. text .. "\x1b[0m"
+    end
 end
 
 local function chalkRed(text)
-    return "\x1b[91m" .. text .. "\x1b[0m"
+    if os.getenv("NO_COLOR") then
+        return text
+    else
+        return "\x1b[91m" .. text .. "\x1b[0m"
+    end
 end
 
 ---@param ctx TestContext | Test
@@ -130,9 +138,9 @@ local function printTestResult(ctx, depth, path)
 
     if depth == 0 then
         if #errors == 0 then
-            print(chalkGreen("All tests passed"))
+            print(chalkGreen("All tests passed."))
         else
-            print(chalkRed(string.format("%d test(s) failed", #errors)))
+            print(chalkRed(string.format("%d test(s) failed.", #errors)))
 
             local printErrors = {}
             for _, error in ipairs(errors) do
