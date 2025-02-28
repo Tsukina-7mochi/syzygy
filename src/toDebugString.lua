@@ -20,80 +20,79 @@ local function escapeString(value)
 end
 
 ---@param value table
----@return string
-local function arrayPartToString(value)
-    local result = ""
+---@return string[]
+local function arrayPartToStrings(value)
     local indices = {}
-
     for k, _ in pairs(value) do
         if type(k) == "number" then
             table.insert(indices, k)
         end
     end
-
-    if #indices == 0 then
-        return ""
-    end
-
     table.sort(indices)
 
-    if indices[1] ~= 1 then
-        result = result .. "[" .. indices[1] .. "] = "
+    if #indices == 0 then
+        return {}
     end
-    result = result .. toDebugString(value[indices[1]]) .. ", "
+
+    local result = {}
+
+    if indices[1] == 1 then
+        table.insert(result, toDebugString(value[indices[1]]))
+    else
+        table.insert(result, string.format("[%s] = %s", tostring(indices[1]), toDebugString(value[indices[1]])))
+    end
 
     for i = 2, #indices do
         local valueString = toDebugString(value[indices[i]])
         local diff = indices[i] - indices[i - 1]
 
         if diff == 1 then
-            result = result .. valueString .. ", "
+            table.insert(result, valueString)
         elseif diff == math.floor(diff) and diff < 10 then
-            result = result .. string.format("(empty x %d), %s, ", diff - 1, valueString)
+            table.insert(result, string.format("(empty x %d)", diff - 1))
+            table.insert(result, valueString)
         else
-            result = result .. string.format("[%s] = %s, ", tostring(indices[i]), valueString)
+            table.insert(result, string.format("[%s] = %s", tostring(indices[i]), valueString))
         end
     end
 
-    return result:sub(1, -3)
+    return result
 end
 
 ---@param value table
----@return string
-local function mapPartToString(value)
-    local result = ""
+---@return string[]
+local function mapPartToStrings(value)
     local keys = {}
-
     for k, _ in pairs(value) do
         if type(k) == "string" then
             table.insert(keys, k)
         end
     end
-
     table.sort(keys)
 
+    local result = {}
     for _, key in pairs(keys) do
-        result = result .. string.format("%s = %s, ", key, toDebugString(value[key]))
+        table.insert(result, string.format("%s = %s", key, toDebugString(value[key])))
     end
 
-    return result:sub(1, -3)
+    return result
 end
 
 toDebugString = function(value)
     if type(value) == "string" then
         return "\"" .. escapeString(value) .. "\""
     elseif type(value) == "table" then
-        local arrayPart = arrayPartToString(value)
-        local mapPart = mapPartToString(value)
+        local arrayPart = arrayPartToStrings(value)
+        local mapPart = mapPartToStrings(value)
 
-        if #arrayPart == 0 and #mapPart == 0 then
+        local items = {}
+        table.move(arrayPart, 1, #arrayPart, #items + 1, items)
+        table.move(mapPart, 1, #mapPart, #items + 1, items)
+
+        if #items == 0 then
             return "{}"
-        elseif #arrayPart == 0 then
-            return "{ " .. mapPart .. " }"
-        elseif #mapPart == 0 then
-            return "{ " .. arrayPart .. " }"
         else
-            return "{ " .. arrayPart .. ", " .. mapPart .. " }"
+            return "{ " .. table.concat(items, ", ") .. " }"
         end
     end
 
