@@ -1,3 +1,4 @@
+---@type fun(value: any): string
 local toDebugString = nil
 
 ---@param value table
