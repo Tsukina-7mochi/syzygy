@@ -6,11 +6,13 @@ local expect = require("src.expect")
 ---@class Test
 ---@field name string
 ---@field func function
+---@field result { success: boolean, error: string } | nil
 
 ---@class TestContext
 ---@field parent TestContext | nil
 ---@field name string
 ---@field children (Test | TestContext)[]
+---@field result { success: boolean } | nil
 
 
 ---@type TestContext | nil
@@ -25,9 +27,6 @@ local function chalkRed(text)
     return "\x1b[91m" .. text .. "\x1b[0m"
 end
 
-local successMark = chalkGreen("✔")
-local failMark = chalkRed("✘")
-
 ---@param ctx TestContext | Test
 ---@param indent integer
 local function dumpTest(ctx, indent)
@@ -41,64 +40,106 @@ local function dumpTest(ctx, indent)
     end
 end
 
----@alias TestError { name: string, error: string }
 ---@param ctx TestContext | Test
 ---@param depth integer
----@return TestError[]
+---@return boolean succeeded
 local function performTest(ctx, depth)
-    ---@type TestError[]
-    local errors = {}
-
-
     if ctx.func ~= nil then
         --node is Test
-        io.stdout:write(("  "):rep(depth) .. ctx.name)
-        io.stdout:flush()
 
         local success, err = pcall(ctx.func)
-        if success then
-            print(successMark)
-        else
-            print(failMark)
-            table.insert(errors, {
-                name = ctx.name,
-                error = tostring(err),
-            })
-        end
+        ctx.result = {
+            success = success,
+            error = tostring(err),
+        }
     else
         --node is test context
-        print(("  "):rep(depth) .. ctx.name)
 
-        local numErrors = 0
-        for _, c in ipairs(ctx.children) do
-            local succeeded = true
-            for _, err in ipairs(performTest(c, depth + 1)) do
-                succeeded = false
-                table.insert(errors, {
-                    name = ctx.name .. " > " .. err.name,
-                    error = err.error,
-                })
+        for _, child in ipairs(ctx.children) do
+            ctx.result = { success = true }
+
+            if not performTest(child, depth + 1) then
+                ctx.result.success = false
             end
+        end
+    end
 
-            if not succeeded then
-                numErrors = numErrors + 1
+    return ctx.result.success
+end
+
+
+---@param ctx TestContext
+---@param depth integer
+---@param path string[]
+---@return { name: string, error: string }[]
+local function printTestResult(ctx, depth, path)
+    ---@type { name: string, error: string }[]
+    local errors = {}
+
+    local newPath = table.pack(table.unpack(path))
+    table.insert(newPath, ctx.name)
+
+    local resultMark = chalkGreen("✔")
+    if not ctx.result.success then
+        resultMark = chalkRed("✘")
+    end
+
+    if ctx.children ~= nil then
+        local successCount = 0
+        for _, child in ipairs(ctx.children) do
+            if child.result.success then
+                successCount = successCount + 1
             end
         end
 
-        if numErrors == 0 then
-            print(("  "):rep(depth) .. ctx.name .. successMark)
-        else
-            local errorText = string.format("(%d/%d)", #ctx.children - numErrors, #ctx.children)
-            print(("  "):rep(depth) .. ctx.name .. failMark .. " " .. errorText)
+        local nameAndResult = table.concat({
+            ("  "):rep(depth),
+            ctx.name,
+            " (",
+            successCount,
+            "/",
+            #ctx.children,
+            ")",
+            resultMark,
+        }, "")
+        print(nameAndResult)
+
+        for _, child in ipairs(ctx.children) do
+            local childErrors = printTestResult(child, depth + 1, newPath)
+            for _, err in ipairs(childErrors) do
+                table.insert(errors, err)
+            end
+        end
+
+        print(nameAndResult)
+    else
+        print(table.concat({
+            ("  "):rep(depth),
+            ctx.name,
+            " ",
+            resultMark,
+        }, ""))
+
+        if (not ctx.result.success) and ctx.result.error ~= nil then
+            table.insert(errors, {
+                name = table.concat(newPath, " > "),
+                error = ctx.result.error,
+            })
         end
     end
 
     if depth == 0 then
-        print(string.format("%d test(s) failed:", #errors))
-        for _, err in ipairs(errors) do
-            print()
-            print("Error in " .. err.name)
-            print(err.error)
+        if #errors == 0 then
+            print(chalkGreen("All tests passed"))
+        else
+            print(chalkRed(string.format("%d test(s) failed", #errors)))
+
+            local printErrors = {}
+            for _, error in ipairs(errors) do
+                table.insert(printErrors, chalkRed("Error in " .. error.name) .. "\n" .. error.error)
+            end
+
+            print(table.concat(printErrors, "\n\n"))
         end
     end
 
@@ -114,7 +155,8 @@ local function describe(name, func)
     local ctx = {
         parent = nil,
         name = name,
-        children = {}
+        children = {},
+        result = nil,
     }
 
     if _ENV.__testContext ~= nil then
@@ -128,7 +170,10 @@ local function describe(name, func)
 
     if _ENV.__testContext.parent == nil then
         --dumpTest(_ENV.__testContext, 0)
-        if #performTest(_ENV.__testContext, 0) ~= 0 then
+        local succeeded = performTest(_ENV.__testContext, 0)
+        printTestResult(_ENV.__testContext, 0, {})
+
+        if not succeeded then
             os.exit(1)
         end
     else
@@ -145,12 +190,14 @@ local function test(name, func)
             parent = nil,
             name = "(anonymous)",
             children = {},
+            result = nil,
         }
     end
 
     table.insert(_ENV.__testContext.children, {
         name = name,
         func = func,
+        result = nil,
     })
 end
 
