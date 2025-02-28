@@ -1,6 +1,24 @@
 ---@type fun(value: any): string
 local toDebugString = nil
 
+---@param value string
+---@return string
+local function escapeString(value)
+    local result = value:gsub("\\", "\\\\")
+        :gsub("\a", "\\a")
+        :gsub("\b", "\\b")
+        :gsub("\f", "\\f")
+        :gsub("\n", "\\n")
+        :gsub("\r", "\\r")
+        :gsub("\t", "\\t")
+        :gsub("\v", "\\v")
+        :gsub("\"", "\\\"")
+        :gsub("[^%g%s]", function(c)
+            return string.format("\\x%02X", c:byte())
+        end)
+    return result
+end
+
 ---@param value table
 ---@return string
 local function arrayPartToString(value)
@@ -63,7 +81,7 @@ end
 
 toDebugString = function(value)
     if type(value) == "string" then
-        return "\"" .. value .. "\""
+        return "\"" .. escapeString(value) .. "\""
     elseif type(value) == "table" then
         local arrayPart = arrayPartToString(value)
         local mapPart = mapPartToString(value)
