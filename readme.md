@@ -30,16 +30,20 @@ end)
 ```
 
 ```
-toBe
+toBe (4/4)✔
   1 + 2 to be 3✔
   1 + 2 not to be 4✔
   Same table✔
   {} not to be {}✔
-toBe✔
-0 test(s) failed:
+toBe (4/4)✔
+All tests passed.
 ```
 
-## functions
+## Configuration
+
+- Set `NO_COLOR` in environment variable to disable colored output.
+
+## Functions
 
 ### describe
 
