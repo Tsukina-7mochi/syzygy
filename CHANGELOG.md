@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/Tsukina-7mochi/lua-testing-library/compare/v0.2.0...v0.2.1) (2025-02-28)
+
+
+### Performance Improvements
+
+* change string concatenation into table.concat ([06aaa76](https://github.com/Tsukina-7mochi/lua-testing-library/commit/06aaa760b430007ab31e847a5169b0e9bd16f355))
+
 ## [0.2.0](https://github.com/Tsukina-7mochi/lua-testing-library/compare/v0.1.1...v0.2.0) (2025-02-28)
 
 
