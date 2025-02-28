@@ -20,11 +20,19 @@ _ENV.__testContext = nil
 
 
 local function chalkGreen(text)
-    return "\x1b[92m" .. text .. "\x1b[0m"
+    if os.getenv("NO_COLOR") then
+        return text
+    else
+        return "\x1b[92m" .. text .. "\x1b[0m"
+    end
 end
 
 local function chalkRed(text)
-    return "\x1b[91m" .. text .. "\x1b[0m"
+    if os.getenv("NO_COLOR") then
+        return text
+    else
+        return "\x1b[91m" .. text .. "\x1b[0m"
+    end
 end
 
 ---@param ctx TestContext | Test
