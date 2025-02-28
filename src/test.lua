@@ -138,9 +138,9 @@ local function printTestResult(ctx, depth, path)
 
     if depth == 0 then
         if #errors == 0 then
-            print(chalkGreen("All tests passed"))
+            print(chalkGreen("All tests passed."))
         else
-            print(chalkRed(string.format("%d test(s) failed", #errors)))
+            print(chalkRed(string.format("%d test(s) failed.", #errors)))
 
             local printErrors = {}
             for _, error in ipairs(errors) do
