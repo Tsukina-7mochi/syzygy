@@ -16,7 +16,7 @@ build: $(DIST) $(NEBLUA)
 
 .PHONY: test
 test:
-	$(LUA) ./test/expect.lua
+	$(LUA) ./test/test.lua
 
 .PHONY: clean
 clean:

@@ -1,4 +1,23 @@
+---@type fun(value: any): string
 local toDebugString = nil
+
+---@param value string
+---@return string
+local function escapeString(value)
+    local result = value:gsub("\\", "\\\\")
+        :gsub("\a", "\\a")
+        :gsub("\b", "\\b")
+        :gsub("\f", "\\f")
+        :gsub("\n", "\\n")
+        :gsub("\r", "\\r")
+        :gsub("\t", "\\t")
+        :gsub("\v", "\\v")
+        :gsub("\"", "\\\"")
+        :gsub("[^%g%s]", function(c)
+            return string.format("\\x%02X", c:byte())
+        end)
+    return result
+end
 
 ---@param value table
 ---@return string
@@ -19,7 +38,7 @@ local function arrayPartToString(value)
     table.sort(indices)
 
     if indices[1] ~= 1 then
-        result = result .. indices[1] .. " = "
+        result = result .. "[" .. indices[1] .. "] = "
     end
     result = result .. toDebugString(value[indices[1]]) .. ", "
 
@@ -30,9 +49,9 @@ local function arrayPartToString(value)
         if diff == 1 then
             result = result .. valueString .. ", "
         elseif diff == math.floor(diff) and diff < 10 then
-            result = result .. string.format("(empty x %d), %s, ", diff, valueString)
+            result = result .. string.format("(empty x %d), %s, ", diff - 1, valueString)
         else
-            result = result .. string.format("%s = %s, ", tostring(indices[i]), valueString)
+            result = result .. string.format("[%s] = %s, ", tostring(indices[i]), valueString)
         end
     end
 
@@ -62,7 +81,7 @@ end
 
 toDebugString = function(value)
     if type(value) == "string" then
-        return "\"" .. value .. "\""
+        return "\"" .. escapeString(value) .. "\""
     elseif type(value) == "table" then
         local arrayPart = arrayPartToString(value)
         local mapPart = mapPartToString(value)
