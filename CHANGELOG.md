@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.3.0](https://github.com/Tsukina-7mochi/lua-testing-library/compare/v0.2.1...v0.3.0) (2026-03-08)
+
+
+### ⚠ BREAKING CHANGES
+
+* correct typo in method name
+
+### Features
+
+* add polyfill to support lua 5.2 ([a5acf7d](https://github.com/Tsukina-7mochi/lua-testing-library/commit/a5acf7d99216a7a666232a59eb3c81755bc324db))
+
+
+### Bug Fixes
+
+* correct typo in method name ([fbb99cd](https://github.com/Tsukina-7mochi/lua-testing-library/commit/fbb99cdaa74a06f962326d505d76f9078e6b67a0))
+
+
+### Miscellaneous Chores
+
+* release v0.3.0 ([dac8cc2](https://github.com/Tsukina-7mochi/lua-testing-library/commit/dac8cc2c0519184361d4014b6c11259ad583f877))
+
 ## [0.2.1](https://github.com/Tsukina-7mochi/lua-testing-library/compare/v0.2.0...v0.2.1) (2025-02-28)
 
 
