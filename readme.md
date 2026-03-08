@@ -86,8 +86,8 @@ The following matchers are available:
 - `toMatchObject(object)` (subset match)
 - `toBeLessThan(number)`
 - `toBeLessThanOrEqual(number)`
-- `toBeGraterThan(number)`
-- `toBeGraterThanOrEqual(number)`
+- `toBeGreaterThan(number)`
+- `toBeGreaterThanOrEqual(number)`
 
 ## Organizing Multiple Test Files
 

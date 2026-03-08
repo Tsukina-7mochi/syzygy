@@ -157,18 +157,18 @@ function expect.toBeFalsy(self)
 end
 
 ---@param another any
-function expect.toBeGraterThan(self, another)
+function expect.toBeGreaterThan(self, another)
     assertExpectation(self)
 
     self:assert(
         self.value > another,
         string.format(
-            "expect(received):toBeGraterThan(number)\nExpected: >%s\nReceived: %s",
+            "expect(received):toBeGreaterThan(number)\nExpected: >%s\nReceived: %s",
             toDebugString(another),
             toDebugString(self.value)
         ),
         string.format(
-            "expect(received).not_:toBeGraterThan(number)\nExpected: <=%s\nReceived: %s",
+            "expect(received).not_:toBeGreaterThan(number)\nExpected: <=%s\nReceived: %s",
             toDebugString(another),
             toDebugString(self.value)
         )
@@ -176,18 +176,18 @@ function expect.toBeGraterThan(self, another)
 end
 
 ---@param another any
-function expect.toBeGraterThanOrEqual(self, another)
+function expect.toBeGreaterThanOrEqual(self, another)
     assertExpectation(self)
 
     self:assert(
         self.value >= another,
         string.format(
-            "expect(received):toBeGraterThanOrEqual(number)\nExpected: >=%s\nReceived: %s",
+            "expect(received):toBeGreaterThanOrEqual(number)\nExpected: >=%s\nReceived: %s",
             toDebugString(another),
             toDebugString(self.value)
         ),
         string.format(
-            "expect(received).not_:toBeGraterThanOrEqual(number)\nExpected: <%s\nReceived: %s",
+            "expect(received).not_:toBeGreaterThanOrEqual(number)\nExpected: <%s\nReceived: %s",
             toDebugString(another),
             toDebugString(self.value)
         )

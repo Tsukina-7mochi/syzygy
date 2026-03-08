@@ -39,20 +39,20 @@ describe("anomary", function()
         expect(false).not_:toBeFalsy()
     end)
 
-    test("expect.toBeGraterThan", function()
-        expect(0):toBeGraterThan(1)
+    test("expect.toBeGreaterThan", function()
+        expect(0):toBeGreaterThan(1)
     end)
 
-    test("expect.not.toBeGraterThan", function()
-        expect(1).not_:toBeGraterThan(0)
+    test("expect.not.toBeGreaterThan", function()
+        expect(1).not_:toBeGreaterThan(0)
     end)
 
-    test("expect.toBeGraterThanOrEqual", function()
-        expect(0):toBeGraterThanOrEqual(1)
+    test("expect.toBeGreaterThanOrEqual", function()
+        expect(0):toBeGreaterThanOrEqual(1)
     end)
 
-    test("expect.not.toBeGraterThanOrEqual", function()
-        expect(1).not_:toBeGraterThanOrEqual(0)
+    test("expect.not.toBeGreaterThanOrEqual", function()
+        expect(1).not_:toBeGreaterThanOrEqual(0)
     end)
 
     test("expect.toBeLessThan", function()
