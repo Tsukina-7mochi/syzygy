@@ -12,16 +12,14 @@ local expect = require("src.expect")
 ---@field children (Test | TestContext)[]
 ---@field result { success: boolean } | nil
 
-
 ---Global context to detect current test context when `describe` and `test` are called.
 ---@type TestContext | nil
 _ENV.__testContext = nil
 
-
 ---Colorize text with green.
 ---@param text string
 ---@return string
-local function chalkGreen(text)
+local function chalkGreen (text)
     if os.getenv("NO_COLOR") then
         return text
     else
@@ -32,7 +30,7 @@ end
 ---Colorize text with red.
 ---@param text string
 ---@return string
-local function chalkRed(text)
+local function chalkRed (text)
     if os.getenv("NO_COLOR") then
         return text
     else
@@ -43,7 +41,7 @@ end
 ---Dump test context tree. Only for debug.
 ---@param ctx TestContext | Test
 ---@param indent integer
-local function dumpTest(ctx, indent)
+local function dumpTest (ctx, indent)
     if ctx.children ~= nil then
         print(("  "):rep(indent) .. ctx.name .. "(" .. #ctx.children .. ")")
         for _, child in ipairs(ctx.children) do
@@ -58,7 +56,7 @@ end
 ---@param ctx TestContext | Test
 ---@param depth integer
 ---@return boolean succeeded
-local function performTest(ctx, depth)
+local function performTest (ctx, depth)
     if ctx.func ~= nil then
         -- `ctx` is the Test
 
@@ -86,7 +84,7 @@ end
 ---@param depth integer
 ---@param path string[]
 ---@return { name: string, error: string }[]
-local function printTestResult(ctx, depth, path)
+local function printTestResult (ctx, depth, path)
     ---@type { name: string, error: string }[]
     local errors = {}
 
@@ -154,7 +152,10 @@ local function printTestResult(ctx, depth, path)
 
             local printErrors = {}
             for _, error in ipairs(errors) do
-                table.insert(printErrors, chalkRed("Error in " .. error.name) .. "\n" .. error.error)
+                table.insert(
+                    printErrors,
+                    chalkRed("Error in " .. error.name) .. "\n" .. error.error
+                )
             end
 
             print(table.concat(printErrors, "\n\n"))
@@ -164,11 +165,10 @@ local function printTestResult(ctx, depth, path)
     return errors
 end
 
-
 ---Define test context
 ---@param name string
 ---@param func fun()
-local function describe(name, func)
+local function describe (name, func)
     ---@type TestContext
     local ctx = {
         parent = nil,
@@ -205,7 +205,7 @@ end
 ---Define test
 ---@param name string
 ---@param func fun()
-local function test(name, func)
+local function test (name, func)
     if _ENV.__testContext == nil then
         -- Define anonymous test context
         _ENV.__testContext = {

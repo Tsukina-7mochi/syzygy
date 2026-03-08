@@ -1,6 +1,6 @@
 local describe = require("src.test").describe
 
-describe("expect", function()
+describe("expect", function ()
     require("test.expect.toBe")
     require("test.expect.toBeCloseTo")
     require("test.expect.toBeTruthy")

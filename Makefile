@@ -21,3 +21,7 @@ test:
 .PHONY: clean
 clean:
 	rm -rf $(DIST)
+
+.PHONY: format
+format:
+	stylua .
