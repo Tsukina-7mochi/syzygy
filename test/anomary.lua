@@ -2,120 +2,120 @@ local describe = require("src.test").describe
 local test = require("src.test").test
 local expect = require("src.test").expect
 
-describe("anomary", function()
-    test("not an expectation", function()
+describe("anomary", function ()
+    test("not an expectation", function ()
         expect(0).toBe()
     end)
 
-    test("expect.toBe", function()
+    test("expect.toBe", function ()
         expect(0):toBe(1)
     end)
 
-    test("expect.not_.toBe", function()
+    test("expect.not_.toBe", function ()
         expect(0).not_:toBe(0)
     end)
 
-    test("expect.toBeCloseTo", function()
+    test("expect.toBeCloseTo", function ()
         expect(0):toBeCloseTo(1)
     end)
 
-    test("expect.not_.toBeCloseTo", function()
+    test("expect.not_.toBeCloseTo", function ()
         expect(0).not_:toBeCloseTo(1)
     end)
 
-    test("expect.toBeTruthy", function()
+    test("expect.toBeTruthy", function ()
         expect(false):toBeTruthy()
     end)
 
-    test("expect.not.toBeTruthy", function()
+    test("expect.not.toBeTruthy", function ()
         expect(true).not_:toBeTruthy()
     end)
 
-    test("expect.toBeFalsy", function()
+    test("expect.toBeFalsy", function ()
         expect(true):toBeFalsy()
     end)
 
-    test("expect.not.toBeFalsy", function()
+    test("expect.not.toBeFalsy", function ()
         expect(false).not_:toBeFalsy()
     end)
 
-    test("expect.toBeGreaterThan", function()
+    test("expect.toBeGreaterThan", function ()
         expect(0):toBeGreaterThan(1)
     end)
 
-    test("expect.not.toBeGreaterThan", function()
+    test("expect.not.toBeGreaterThan", function ()
         expect(1).not_:toBeGreaterThan(0)
     end)
 
-    test("expect.toBeGreaterThanOrEqual", function()
+    test("expect.toBeGreaterThanOrEqual", function ()
         expect(0):toBeGreaterThanOrEqual(1)
     end)
 
-    test("expect.not.toBeGreaterThanOrEqual", function()
+    test("expect.not.toBeGreaterThanOrEqual", function ()
         expect(1).not_:toBeGreaterThanOrEqual(0)
     end)
 
-    test("expect.toBeLessThan", function()
+    test("expect.toBeLessThan", function ()
         expect(1):toBeLessThan(0)
     end)
 
-    test("expect.not.toBeLessThan", function()
+    test("expect.not.toBeLessThan", function ()
         expect(0).not_:toBeLessThan(1)
     end)
 
-    test("expect.toBeLessThanOrEqual", function()
+    test("expect.toBeLessThanOrEqual", function ()
         expect(1):toBeLessThanOrEqual(0)
     end)
 
-    test("expect.not.toBeLessThanOrEqual", function()
+    test("expect.not.toBeLessThanOrEqual", function ()
         expect(0).not_:toBeLessThanOrEqual(1)
     end)
 
-    test("expect.toBeNil", function()
+    test("expect.toBeNil", function ()
         expect(0):toBeNil()
     end)
 
-    test("expect.not.toBeNil", function()
+    test("expect.not.toBeNil", function ()
         expect(nil).not_:toBeNil()
     end)
 
-    test("expect.toContain", function()
+    test("expect.toContain", function ()
         expect({ 1, 2, 3 }):toContain(0)
     end)
 
-    test("expect.not.toContain", function()
+    test("expect.not.toContain", function ()
         expect({ 1, 2, 3 }).not_:toContain(1)
     end)
 
-    test("expect.toEqual", function()
+    test("expect.toEqual", function ()
         expect({ a = { b = 1 } }):toEqual({ a = { b = 2 } })
     end)
 
-    test("expect.not.toEqual", function()
+    test("expect.not.toEqual", function ()
         expect({ a = { b = 1 } }).not_:toEqual({ a = { b = 1 } })
     end)
 
-    test("expect.toHaveLength", function()
+    test("expect.toHaveLength", function ()
         expect("123"):toHaveLength(4)
     end)
 
-    test("expect.not.toHaveLength", function()
+    test("expect.not.toHaveLength", function ()
         expect("123").not_:toHaveLength(3)
     end)
 
-    test("expect.toMatch", function()
+    test("expect.toMatch", function ()
         expect("abc123a"):toMatch("^%l+%d+$")
     end)
 
-    test("expect.not.toMatch", function()
+    test("expect.not.toMatch", function ()
         expect("abc123").not_:toMatch("^%l+%d+$")
     end)
 
-    test("expect.toMatchObject", function()
+    test("expect.toMatchObject", function ()
         expect({ a = 1 }):toMatchObject({ a = 1, b = 2 })
     end)
 
-    test("expect.not.toMatchObject", function()
+    test("expect.not.toMatchObject", function ()
         expect({ a = 1, b = 2 }).not_:toMatchObject({ a = 1 })
     end)
 end)

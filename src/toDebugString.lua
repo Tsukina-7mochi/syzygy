@@ -3,8 +3,9 @@ local toDebugString = nil
 
 ---@param value string
 ---@return string
-local function escapeString(value)
-    local result = value:gsub("\\", "\\\\")
+local function escapeString (value)
+    local result = value
+        :gsub("\\", "\\\\")
         :gsub("\a", "\\a")
         :gsub("\b", "\\b")
         :gsub("\f", "\\f")
@@ -12,8 +13,8 @@ local function escapeString(value)
         :gsub("\r", "\\r")
         :gsub("\t", "\\t")
         :gsub("\v", "\\v")
-        :gsub("\"", "\\\"")
-        :gsub("[^%g%s]", function(c)
+        :gsub('"', '\\"')
+        :gsub("[^%g%s]", function (c)
             return string.format("\\x%02X", c:byte())
         end)
     return result
@@ -21,7 +22,7 @@ end
 
 ---@param value table
 ---@return string[]
-local function arrayPartToStrings(value)
+local function arrayPartToStrings (value)
     local indices = {}
     for k, _ in pairs(value) do
         if type(k) == "number" then
@@ -39,7 +40,14 @@ local function arrayPartToStrings(value)
     if indices[1] == 1 then
         table.insert(result, toDebugString(value[indices[1]]))
     else
-        table.insert(result, string.format("[%s] = %s", tostring(indices[1]), toDebugString(value[indices[1]])))
+        table.insert(
+            result,
+            string.format(
+                "[%s] = %s",
+                tostring(indices[1]),
+                toDebugString(value[indices[1]])
+            )
+        )
     end
 
     for i = 2, #indices do
@@ -52,7 +60,10 @@ local function arrayPartToStrings(value)
             table.insert(result, string.format("(empty x %d)", diff - 1))
             table.insert(result, valueString)
         else
-            table.insert(result, string.format("[%s] = %s", tostring(indices[i]), valueString))
+            table.insert(
+                result,
+                string.format("[%s] = %s", tostring(indices[i]), valueString)
+            )
         end
     end
 
@@ -61,7 +72,7 @@ end
 
 ---@param value table
 ---@return string[]
-local function mapPartToStrings(value)
+local function mapPartToStrings (value)
     local keys = {}
     for k, _ in pairs(value) do
         if type(k) == "string" then
@@ -72,15 +83,18 @@ local function mapPartToStrings(value)
 
     local result = {}
     for _, key in pairs(keys) do
-        table.insert(result, string.format("%s = %s", key, toDebugString(value[key])))
+        table.insert(
+            result,
+            string.format("%s = %s", key, toDebugString(value[key]))
+        )
     end
 
     return result
 end
 
-toDebugString = function(value)
+toDebugString = function (value)
     if type(value) == "string" then
-        return "\"" .. escapeString(value) .. "\""
+        return '"' .. escapeString(value) .. '"'
     elseif type(value) == "table" then
         local arrayPart = arrayPartToStrings(value)
         local mapPart = mapPartToStrings(value)

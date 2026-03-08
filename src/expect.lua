@@ -10,7 +10,7 @@ local expect = {}
 ---@param sub any
 ---@param sup any
 ---@return boolean
-local function isSubtypeOfOrEqualsTo(sub, sup)
+local function isSubtypeOfOrEqualsTo (sub, sup)
     if sub == sup then
         return true
     elseif type(sub) ~= type(sup) then
@@ -33,13 +33,13 @@ end
 ---@param a any
 ---@param b any
 ---@return boolean
-local function equals(a, b)
+local function equals (a, b)
     return isSubtypeOfOrEqualsTo(a, b) and isSubtypeOfOrEqualsTo(b, a)
 end
 
 ---@param value any
 ---@return boolean
-local function isExpectation(value)
+local function isExpectation (value)
     if type(value) ~= "table" then
         return false
     end
@@ -57,10 +57,10 @@ local function isExpectation(value)
 end
 
 ---@param value any
-local function assertExpectation(value)
+local function assertExpectation (value)
     assert(
         isExpectation(value),
-        "Received value seems not to be Expectation.\nPerhaps you are using \".\" instead of \":\" to call the method?"
+        'Received value seems not to be Expectation.\nPerhaps you are using "." instead of ":" to call the method?'
     )
 end
 
@@ -68,7 +68,7 @@ end
 ---@param pass boolean
 ---@param message string
 ---@param negMessage string
-function expect.assert(self, pass, message, negMessage)
+function expect.assert (self, pass, message, negMessage)
     if not self.negated then
         assert(pass, message)
     else
@@ -78,7 +78,7 @@ end
 
 ---Expects `==` equality.
 ---@param expected any
-function expect.toBe(self, expected)
+function expect.toBe (self, expected)
     assertExpectation(self)
 
     self:assert(
@@ -99,7 +99,7 @@ end
 ---Expects approximate equality of floating numbers.
 ---@param number number
 ---@param numDigits integer?
-function expect.toBeCloseTo(self, number, numDigits)
+function expect.toBeCloseTo (self, number, numDigits)
     assertExpectation(self)
 
     if numDigits == nil then
@@ -117,7 +117,7 @@ function expect.toBeCloseTo(self, number, numDigits)
     end
 
     local received = math.abs(self.value - number)
-    local expected = (10 ^ -(numDigits)) / 2
+    local expected = (10 ^ -numDigits) / 2
 
     self:assert(
         received < expected,
@@ -135,29 +135,41 @@ function expect.toBeCloseTo(self, number, numDigits)
 end
 
 ---Expects falsy values: false and nil.
-function expect.toBeTruthy(self)
+function expect.toBeTruthy (self)
     assertExpectation(self)
 
     self:assert(
         not not self.value,
-        string.format("expect(received):toBeTruthy()\nReceived: %s", toDebugString(self.value)),
-        string.format("expect(received).not_:toBeTruthy()\nReceived: %s", toDebugString(self.value))
+        string.format(
+            "expect(received):toBeTruthy()\nReceived: %s",
+            toDebugString(self.value)
+        ),
+        string.format(
+            "expect(received).not_:toBeTruthy()\nReceived: %s",
+            toDebugString(self.value)
+        )
     )
 end
 
 ---Expects falsy values: false and nil.
-function expect.toBeFalsy(self)
+function expect.toBeFalsy (self)
     assertExpectation(self)
 
     self:assert(
         not self.value,
-        string.format("expect(received):toBeFalsy()\nReceived: %s", toDebugString(self.value)),
-        string.format("expect(received).not_:toBeFalsy()\nReceived: %s", toDebugString(self.value))
+        string.format(
+            "expect(received):toBeFalsy()\nReceived: %s",
+            toDebugString(self.value)
+        ),
+        string.format(
+            "expect(received).not_:toBeFalsy()\nReceived: %s",
+            toDebugString(self.value)
+        )
     )
 end
 
 ---@param another any
-function expect.toBeGreaterThan(self, another)
+function expect.toBeGreaterThan (self, another)
     assertExpectation(self)
 
     self:assert(
@@ -176,7 +188,7 @@ function expect.toBeGreaterThan(self, another)
 end
 
 ---@param another any
-function expect.toBeGreaterThanOrEqual(self, another)
+function expect.toBeGreaterThanOrEqual (self, another)
     assertExpectation(self)
 
     self:assert(
@@ -195,7 +207,7 @@ function expect.toBeGreaterThanOrEqual(self, another)
 end
 
 ---@param another any
-function expect.toBeLessThan(self, another)
+function expect.toBeLessThan (self, another)
     assertExpectation(self)
 
     self:assert(
@@ -214,7 +226,7 @@ function expect.toBeLessThan(self, another)
 end
 
 ---@param another any
-function expect.toBeLessThanOrEqual(self, another)
+function expect.toBeLessThanOrEqual (self, another)
     assertExpectation(self)
 
     self:assert(
@@ -232,7 +244,7 @@ function expect.toBeLessThanOrEqual(self, another)
     )
 end
 
-function expect.toBeNil(self)
+function expect.toBeNil (self)
     assertExpectation(self)
 
     self:assert(
@@ -250,7 +262,7 @@ end
 
 ---Expects table (array) to contain a item as `==` equality.
 ---@param item any
-function expect.toContain(self, item)
+function expect.toContain (self, item)
     assertExpectation(self)
 
     local pass = false
@@ -278,7 +290,7 @@ end
 
 ---@param self Expectation
 ---@param another any
-function expect.toEqual(self, another)
+function expect.toEqual (self, another)
     assertExpectation(self)
 
     self:assert(
@@ -298,7 +310,7 @@ end
 
 ---@param self Expectation
 ---@param length number
-function expect.toHaveLength(self, length)
+function expect.toHaveLength (self, length)
     assertExpectation(self)
 
     self:assert(
@@ -320,7 +332,7 @@ end
 
 ---@param self Expectation
 ---@param pattern string
-function expect.toMatch(self, pattern)
+function expect.toMatch (self, pattern)
     assertExpectation(self)
 
     assert(
@@ -355,7 +367,7 @@ end
 
 ---@param self Expectation
 ---@param object any
-function expect.toMatchObject(self, object)
+function expect.toMatchObject (self, object)
     assertExpectation(self)
 
     self:assert(
@@ -374,7 +386,7 @@ function expect.toMatchObject(self, object)
 end
 
 setmetatable(expect --[[@as table]], {
-    __call = function(_, value)
+    __call = function (_, value)
         local obj = { value = value, negated = false }
         local notObj = { negated = true }
         obj.not_, notObj.not_ = notObj, obj
@@ -383,7 +395,7 @@ setmetatable(expect --[[@as table]], {
         setmetatable(notObj, { __index = obj })
 
         return obj
-    end
+    end,
 })
 
 return expect
