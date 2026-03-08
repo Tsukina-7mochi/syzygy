@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/Tsukina-7mochi/syzygy/compare/v0.3.0...v0.4.0) (2026-03-08)
+
+
+### Miscellaneous Chores
+
+* rename project to syzygy ([4f91ff0](https://github.com/Tsukina-7mochi/syzygy/commit/4f91ff077634cf1773b67f47b9f6d8e5f0f03ee2))
+
 ## [0.3.0](https://github.com/Tsukina-7mochi/lua-testing-library/compare/v0.2.1...v0.3.0) (2026-03-08)
 
 
