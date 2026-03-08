@@ -11,7 +11,7 @@ $(NEBLUA):
 build: $(NEBLUA)
 	rm -f $(DIST)
 	mkdir -p $$(dirname $(DIST))
-	$(LUA) $(NEBLUA) -e src.test -o $(DIST)
+	$(LUA) $(NEBLUA) -e src.syzygy -o $(DIST)
 
 .PHONY: test
 test:

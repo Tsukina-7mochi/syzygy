@@ -1,6 +1,6 @@
-local describe = require("src.test").describe
-local test = require("src.test").test
-local expect = require("src.test").expect
+local describe = require("syzygy").describe
+local test = require("syzygy").test
+local expect = require("syzygy").expect
 
 describe("toContain", function ()
     test("{ 1, 2, 3 } contains 1", function ()
