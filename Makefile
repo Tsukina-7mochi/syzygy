@@ -1,18 +1,17 @@
 LUA = lua
-DIST = dist
+DIST = ./dist/syzygy.lua
 NEBLUA = ./library/neblua-cli.lua
 
 all: build
-
-$(DIST):
-	mkdir -p $(DIST)
 
 $(NEBLUA):
 	mkdir -p ./library
 	curl -sSL https://github.com/Tsukina-7mochi/neblua/releases/latest/download/neblua-cli.lua > $(NEBLUA)
 
-build: $(DIST) $(NEBLUA)
-	$(LUA) $(NEBLUA) -e src.test -o ./dist/test.lua ./src/test.lua
+build: $(NEBLUA)
+	rm -f $(DIST)
+	mkdir -p $$(dirname $(DIST))
+	$(LUA) $(NEBLUA) -e src.test -o $(DIST)
 
 .PHONY: test
 test:

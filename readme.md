@@ -1,5 +1,5 @@
 <div align="center">
-<h1>Lua Testing Library</h1>
+<h1>Syzygy</h1>
 
 <div>A tiny, Jest-like testing library for Lua</div>
 <div>Supports Lua 5.2, 5.3 and 5.4</div>
@@ -9,20 +9,20 @@
 
 This library is distributed as a single Lua file via GitHub Releases.
 
-1. Download `test.lua` from the [latest release](https://github.com/Tsukina-7mochi/lua-testing-library/releases/latest):
-2. Put `test.lua` somewhere in your Lua module search path (`package.path`), for example your project root.
-3. Import it as module `test`.
+1. Download `syzygy.lua` from the [latest release](https://github.com/Tsukina-7mochi/lua-testing-library/releases/latest):
+2. Put `syzygy.lua` somewhere in your Lua module search path (`package.path`), for example your project root.
+3. Import it as module `syzygy`.
 
 ## Quick Start
 
 ### 1. Import
 
-Import from module `test`:
+Import from module `syzygy`:
 
 ```lua
-local describe = require("test").describe
-local test = require("test").test
-local expect = require("test").expect
+local describe = require("syzygy").describe
+local test = require("syzygy").test
+local expect = require("syzygy").expect
 ```
 
 ### 2. Write tests
@@ -30,9 +30,9 @@ local expect = require("test").expect
 Use `describe` for grouping, `test` for defining tests. Use `expect` as assertion utility.
 
 ```lua
-local describe = require("test").describe
-local test = require("test").test
-local expect = require("test").expect
+local describe = require("syzygy").describe
+local test = require("syzygy").test
+local expect = require("syzygy").expect
 
 describe("math", function()
     test("1 + 2 = 3", function()
@@ -95,7 +95,7 @@ The following matchers are available:
 You can require test modules inside a root `describe`:
 
 ```lua
-local describe = require("test").describe
+local describe = require("syzygy").describe
 
 describe("all tests", function()
     require("user.math_test")
@@ -122,7 +122,7 @@ We can create a script to organize tests with file paths:
 ```lua
 -- test_runner.lua
 
-local describe = require("test").describe
+local describe = require("syzygy").describe
 
 local separator = package.config:sub(1, 1)
 local test_table = {}
