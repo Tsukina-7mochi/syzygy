@@ -1,58 +1,160 @@
-# Lua Testing Library
+<div align="center">
+<h1>Lua Testing Library</h1>
 
-A tiny testing library for Lua. Supports [Lua language server](https://github.com/LuaLS/lua-language-server)
+<div>A tiny, Jest-like testing library for Lua</div>
+</div>
 
-## Usage
+## Installation
+
+This library is distributed as a single Lua file via GitHub Releases.
+
+1. Download `test.lua` from the [latest release](https://github.com/Tsukina-7mochi/lua-testing-library/releases/latest):
+2. Put `test.lua` somewhere in your Lua module search path (`package.path`), for example your project root.
+3. Import it as module `test`.
+
+## Quick Start
+
+### 1. Import
+
+Import from module `test`:
 
 ```lua
-local describe = require("src.test").describe
-local test = require("src.test").test
-local expect = require("src.test").expect
+local describe = require("test").describe
+local test = require("test").test
+local expect = require("test").expect
+```
 
-describe("toBe", function()
-    test("1 + 2 to be 3", function()
+### 2. Write tests
+
+Use `describe` for grouping, `test` for defining tests. Use `expect` as assertion utility.
+
+```lua
+local describe = require("test").describe
+local test = require("test").test
+local expect = require("test").expect
+
+describe("math", function()
+    test("1 + 2 = 3", function()
         expect(1 + 2):toBe(3)
     end)
 
-    test("1 + 2 not to be 4", function()
+    test("1 + 2 is not 4", function()
         expect(1 + 2).not_:toBe(4)
-    end)
-
-    test("Same table", function()
-        local tbl = {}
-        expect(tbl):toBe(tbl)
-    end)
-
-    test("{} not to be {}", function()
-        expect({}).not_:toBe({})
     end)
 end)
 ```
 
+### 3. Run
+
+The test definition files are executable on their own.
+
+```sh
+lua my_test.lua
 ```
-toBe (4/4)✔
-  1 + 2 to be 3✔
-  1 + 2 not to be 4✔
-  Same table✔
-  {} not to be {}✔
-toBe (4/4)✔
-All tests passed.
+
+## API
+
+### `describe(name, fn)`
+
+Defines a test group. Groups can be nested.
+
+### `test(name, fn)`
+
+Registers a test case in the current `describe`.
+
+### `expect(value)`
+
+Creates an expectation object for assertions. Use negation with `.not_`:
+
+```lua
+expect(10).not_:toBe(5)
+```
+
+## Matchers
+
+The following matchers are available:
+
+- `toBe(expected)` (`==` equality)
+- `toBeCloseTo(number[, numDigits])`
+- `toBeTruthy()`
+- `toBeFalsy()`
+- `toBeNil()`
+- `toContain(item)` (array-like tables only; checks with `ipairs`)
+- `toEqual(value)` (deep equality)
+- `toHaveLength(length)` (`#value`)
+- `toMatch(pattern)` (Lua pattern on strings)
+- `toMatchObject(object)` (subset match)
+- `toBeLessThan(number)`
+- `toBeLessThanOrEqual(number)`
+- `toBeGraterThan(number)`
+- `toBeGraterThanOrEqual(number)`
+
+## Organizing Multiple Test Files
+
+You can require test modules inside a root `describe`:
+
+```lua
+local describe = require("test").describe
+
+describe("all tests", function()
+    require("user.math_test")
+    require("user.string_test")
+end)
+```
+
+Then run:
+
+```sh
+lua all_test.lua
 ```
 
 ## Configuration
 
-- Set `NO_COLOR` in environment variable to disable colored output.
+- Set `NO_COLOR=1` to disable colored output.
 
-## Functions
+## Recipes
 
-### describe
+### Collecting Test Files
 
-Makes groups of tests.
+We can create a script to organize tests with file paths:
 
-### test
+```lua
+-- test_runner.lua
 
-Register test.
+local describe = require("test").describe
 
-### expect
+local separator = package.config:sub(1, 1)
+local test_table = {}
+for _, path in ipairs(arg) do
+    local t = test_table
+    for s in string.gmatch(path, "[^" .. separator .. "]+") do
+        if not t[s] then
+            t[s] = {}
+        end
+        t = t[s]
+    end
+    t[1] = path
+end
 
-Makes expectation. See `src/expect.lua`.
+local function expand_tests (root)
+    for k, t in pairs(root) do
+        if t[1] then
+            local name = t[1]:sub(1, -5):gsub(separator, ".")
+            require(name)
+        else
+            describe(k, function ()
+                print("describe " .. k)
+                expand_tests(t)
+            end)
+        end
+    end
+end
+
+expand_tests(test_table)
+```
+
+then we call them as:
+
+```sh
+find . -name ''*_test.lua'' | xargs lua ./test_runner.lua
+```
