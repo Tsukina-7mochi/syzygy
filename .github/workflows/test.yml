@@ -10,7 +10,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        lua: ["5.3", "5.4"]
+        lua: ["5.2", "5.3", "5.4"]
 
     steps:
       - uses: actions/checkout@v5
