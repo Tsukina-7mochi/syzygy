@@ -2,9 +2,29 @@ name: Run tests
 
 on:
   push:
+    branches:
+      - main
   pull_request:
 
+concurrency:
+  group: test-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  LUA_BUILD_VERSION: "5.4"
+
 jobs:
+  format-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: JohnnyMorganz/stylua-action@v4
+        with:
+          token: ${{ github.token }}
+          version: latest
+          args: --check .
+
   run-tests:
     runs-on: ubuntu-latest
     strategy:
@@ -15,12 +35,9 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - uses: leafo/gh-actions-lua@v12
+      - uses: ./.github/actions/setup-and-build
         with:
-          luaVersion: "5.4"
-
-      - name: Build
-        run: make
+          luaVersion: ${{ env.LUA_BUILD_VERSION }}
 
       - uses: leafo/gh-actions-lua@v12
         with:

@@ -1,0 +1,19 @@
+name: Setup Lua and Build
+description: Checkout, install Lua, and build the project
+
+inputs:
+  luaVersion:
+    description: Lua version to install
+    required: false
+    default: "5.4"
+
+runs:
+  using: composite
+  steps:
+    - uses: leafo/gh-actions-lua@v12
+      with:
+        luaVersion: ${{ inputs.luaVersion }}
+
+    - name: Build
+      shell: bash
+      run: make build

@@ -1,13 +1,20 @@
+name: release
+
 on:
   push:
     branches:
       - main
 
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
 permissions:
   contents: write
   pull-requests: write
 
-name: release
+env:
+  LUA_BUILD_VERSION: "5.4"
 
 jobs:
   release-please:
@@ -22,7 +29,6 @@ jobs:
         with:
           release-type: simple
 
-
   upload-artifact:
     runs-on: ubuntu-latest
     needs: release-please
@@ -31,12 +37,9 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - uses: leafo/gh-actions-lua@v12
+      - uses: ./.github/actions/setup-and-build
         with:
-          lua-version: "5.4"
-
-      - name: Build
-        run: make build
+          luaVersion: ${{ env.LUA_BUILD_VERSION }}
 
       - name: Upload Artifact
         env:
@@ -45,12 +48,15 @@ jobs:
 
   upload-luarocks:
     runs-on: ubuntu-latest
+    needs: release-please
+    if: ${{ needs.release-please.outputs.release_created }}
+
     steps:
       - uses: actions/checkout@v5
 
-      - uses: leafo/gh-actions-lua@v12
+      - uses: ./.github/actions/setup-and-build
         with:
-          lua-version: "5.4"
+          luaVersion: ${{ env.LUA_BUILD_VERSION }}
 
       - uses: leafo/gh-actions-luarocks@v6
 
@@ -58,4 +64,6 @@ jobs:
         run: luarocks pack *.rockspec
 
       - name: Upload
-        run: luarocks upload *.rockspec --api-key=${{ secrets.LUAROCKS_API_KEY }}
+        env:
+          LUAROCKS_API_KEY: ${{ secrets.LUAROCKS_API_KEY }}
+        run: luarocks upload *.rockspec --api-key="$LUAROCKS_API_KEY"
