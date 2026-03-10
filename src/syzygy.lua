@@ -1,5 +1,5 @@
-require("src.polyfill").load()
-local expect = require("src.expect")
+require("polyfill").load()
+local expect = require("expect")
 
 ---@class Test
 ---@field name string

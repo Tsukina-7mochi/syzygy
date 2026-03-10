@@ -1,6 +1,5 @@
 {
   "Lua.runtime.version": "5.3",
-  "Lua.workspace.ignoreDir": [
-    "/dist"
-  ]
+  "Lua.workspace.ignoreDir": ["/dist"],
+  "path": ["./?.lua", "./?/init.lua", "./src/?.lua", "./src/?/init.lua"]
 }

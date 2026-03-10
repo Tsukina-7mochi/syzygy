@@ -17,9 +17,19 @@ jobs:
 
       - uses: leafo/gh-actions-lua@v12
         with:
+          luaVersion: "5.4"
+
+      - name: Build
+        run: make
+
+      - uses: leafo/gh-actions-lua@v12
+        with:
           luaVersion: ${{ matrix.lua }}
 
       - run: lua -v
 
       - name: Run tests
         run: make test
+
+      - name: Run tests with artifact
+        run: make test-dist

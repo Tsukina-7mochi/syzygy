@@ -1,4 +1,4 @@
-local describe = require("src.test").describe
+local describe = require("syzygy").describe
 
 describe("describe", function ()
     require("test.expect")

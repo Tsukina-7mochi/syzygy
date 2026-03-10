@@ -1,6 +1,6 @@
-local describe = require("src.test").describe
-local test = require("src.test").test
-local expect = require("src.test").expect
+local describe = require("syzygy").describe
+local test = require("syzygy").test
+local expect = require("syzygy").expect
 
 describe("toBe", function ()
     test("1 + 2 to be 3", function ()
