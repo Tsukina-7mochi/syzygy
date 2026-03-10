@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.5.0](https://github.com/Tsukina-7mochi/syzygy/compare/v0.4.0...v0.5.0) (2026-03-10)
+
+
+### ⚠ BREAKING CHANGES
+
+* unsupport lua 5.2
+
+### Features
+
+* rename entry file ([6f38f0e](https://github.com/Tsukina-7mochi/syzygy/commit/6f38f0e5c9cf5969a2e6af513063c4702f743324))
+* unsupport lua 5.2 ([755b605](https://github.com/Tsukina-7mochi/syzygy/commit/755b6059e5fdbd347b760ac5dff99b097349c914))
+
+
+### Miscellaneous Chores
+
+* release v0.5.0 ([8d56707](https://github.com/Tsukina-7mochi/syzygy/commit/8d56707e8e5d388357c1e1098fb1c74276394a92))
+
 ## [0.4.0](https://github.com/Tsukina-7mochi/syzygy/compare/v0.3.0...v0.4.0) (2026-03-08)
 
 
