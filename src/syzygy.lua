@@ -1,4 +1,3 @@
-require("polyfill").load()
 local expect = require("expect")
 
 ---@class Test
