@@ -2,7 +2,7 @@
 <h1>Syzygy</h1>
 
 <div>A tiny, Jest-like testing library for Lua</div>
-<div>Supports Lua 5.2, 5.3 and 5.4</div>
+<div>Supports Lua 5.3 and 5.4</div>
 </div>
 
 ## Installation
