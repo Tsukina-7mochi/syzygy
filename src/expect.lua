@@ -1,4 +1,4 @@
-local toDebugString = require("src.toDebugString")
+local toDebugString = require("toDebugString")
 
 ---@class Expectation
 ---@field value any
