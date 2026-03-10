@@ -1,7 +1,7 @@
 local describe = require("syzygy").describe
 local test = require("syzygy").test
 local expect = require("syzygy").expect
-local toDebugString = require("src.toDebugString")
+local toDebugString = require("syzygy.toDebugString")
 
 describe("toDebugString", function ()
     test("nil", function ()

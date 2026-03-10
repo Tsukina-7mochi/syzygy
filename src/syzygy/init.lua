@@ -1,4 +1,4 @@
-local expect = require("expect")
+local expect = require("syzygy.expect")
 
 ---@class Test
 ---@field name string
