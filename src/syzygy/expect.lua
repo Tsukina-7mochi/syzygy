@@ -1,4 +1,4 @@
-local toDebugString = require("toDebugString")
+local toDebugString = require("syzygy.toDebugString")
 
 ---@class Expectation
 ---@field value any
